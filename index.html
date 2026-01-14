@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Kaka Tea Stall – Self Order</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#fff8f2;color:#222;}
+.header{background:#7b1e1e;color:white;text-align:center;padding:12px;}
+.header h2{margin:4px 0;font-size:18px;}
+.header small{font-size:12px;opacity:.9;}
+.container{padding:10px;}
+.item-list{display:flex;flex-direction:column;gap:8px;max-height:65vh;overflow-y:auto;}
+.item-card{background:white;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,.12);display:flex;align-items:center;padding:6px;gap:8px;}
+.item-card img{width:55px;height:55px;border-radius:6px;object-fit:cover;background:#eee;}
+.item-info{flex:1;font-size:14px;text-align:left;}
+.qty-box{display:flex;align-items:center;gap:6px;}
+.qty-box button{width:26px;height:26px;border:none;background:#b33939;color:white;font-size:16px;border-radius:4px;}
+.cart-bar{position:fixed;bottom:0;left:0;right:0;background:#7b1e1e;color:white;text-align:center;padding:8px;}
+button.paybtn{background:#ffd32a;border:none;padding:8px 14px;border-radius:6px;font-weight:bold;}
+.hidden{display:none;}
+.card{background:white;margin:12px;padding:15px;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.15);text-align:center;}
+.divider{border-top:1px dashed #999;margin:8px 0;}
+.backbtn{background:#7b1e1e;color:white;border:none;padding:8px 14px;border-radius:6px;margin-top:8px;}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+<h2>☕ Kaka Tea Stall</h2>
+<small>Open: 4:30 AM – Close: 11:00 PM</small>
+</div>
+
+<div class="container">
+
+<!-- ITEM LIST -->
+<div id="shop">
+<h3>Select Items</h3>
+<div class="item-list" id="itemList"></div>
+</div>
+
+<!-- BILL SECTION -->
+<div id="billBox" class="hidden">
+<div class="card">
+
+<h2>Kaka Tea Stall Bill</h2>
+<div class="divider"></div>
+
+<p>Bill No: <b id="billNo"></b></p>
+<div id="billItems"></div>
+
+<div class="divider"></div>
+<h3>Total: ₹ <span id="billTotal"></span></h3>
+
+<div class="divider"></div>
+
+<h3>📷 Scan QR Code To Pay</h3>
+<img id="qrImg" width="220">
+
+<h3>OR</h3>
+<a id="payBtn"><button class="paybtn">📲 Pay Now</button></a>
+
+<br><br>
+<button class="paybtn" onclick="shareWhatsApp()">📤 Share Bill on WhatsApp</button>
+
+<div class="divider"></div>
+
+<h4>Upload Payment Screenshot</h4>
+<p style="font-size:13px;">Payment ke baad screenshot upload karna anivarya hai</p>
+
+<a href="https://forms.gle/ntDaekagEsrvXo7H7" target="_blank">
+<button class="paybtn">📤 Upload Screenshot</button>
+</a>
+
+<button class="backbtn" onclick="goBack()">⬅ Back</button>
+
+</div>
+</div>
+
+</div>
+
+<!-- CART BAR -->
+<div class="cart-bar" id="cartBar">
+Total: ₹ <span id="cartTotal">0</span>
+<button class="paybtn" onclick="generateBill()">Generate Bill</button>
+</div>
+
+<script>
+/* ===== ITEMS ===== */
+let items = [
+ {id:1, name:"Regular Chai", price:20, img:"https://i.imgur.com/5KX8yWQ.jpg"},
+ {id:2, name:"Masala Chai", price:25, img:"https://i.imgur.com/7yUvePI.jpg"},
+ {id:3, name:"Ginger Chai", price:25, img:"https://i.imgur.com/1JQJg9S.jpg"},
+ {id:4, name:"Cutting Chai", price:15, img:"https://i.imgur.com/Fk7V4ks.jpg"},
+ {id:5, name:"Full Thali", price:60, img:"https://i.imgur.com/Y6XbQK9.jpg"},
+ {id:6, name:"Sabji", price:20, img:"https://i.imgur.com/QN0yM2C.jpg"},
+ {id:7, name:"Dal", price:20, img:"https://i.imgur.com/6M9Kj5M.jpg"},
+ {id:8, name:"Chawal", price:20, img:"https://i.imgur.com/Hp4w7qJ.jpg"},
+ {id:9, name:"Roti (with meal)", price:5, img:"https://i.imgur.com/lhG7RjF.jpg"},
+ {id:10,name:"Roti Only", price:6, img:"https://i.imgur.com/lhG7RjF.jpg"}
+];
+
+let cart={};
+
+function renderItems(){
+ let list=document.getElementById("itemList");
+ list.innerHTML="";
+ items.forEach(item=>{
+  if(!cart[item.id]) cart[item.id]=0;
+  list.innerHTML+=`
+   <div class="item-card">
+     <img src="${item.img}">
+     <div class="item-info"><b>${item.name}</b><br>₹${item.price}</div>
+     <div class="qty-box">
+       <button onclick="changeQty(${item.id},-1)">−</button>
+       <span id="qty${item.id}">${cart[item.id]}</span>
+       <button onclick="changeQty(${item.id},1)">+</button>
+     </div>
+   </div>`;
+ });
+}
+renderItems();
+
+function changeQty(id,delta){
+ cart[id]+=delta;
+ if(cart[id]<0) cart[id]=0;
+ document.getElementById("qty"+id).innerText=cart[id];
+ updateTotal();
+}
+
+function updateTotal(){
+ let total=0;
+ items.forEach(item=> total+=cart[item.id]*item.price);
+ document.getElementById("cartTotal").innerText=total;
+}
+
+function makeBillNo(){ return "KAKA"+Date.now(); }
+
+function generateBill(){
+ let total=Number(document.getElementById("cartTotal").innerText);
+ if(total==0){alert("Select items first");return;}
+
+ let billno=makeBillNo();
+ document.getElementById("billNo").innerText=billno;
+ document.getElementById("billTotal").innerText=total;
+
+ let billItems=document.getElementById("billItems");
+ billItems.innerHTML="";
+ items.forEach(item=>{
+  if(cart[item.id]>0){
+   billItems.innerHTML+=`${item.name} × ${cart[item.id]} = ₹${cart[item.id]*item.price}<br>`;
+  }
+ });
+
+ let upiID="paytmqr6z5isw@ptys";
+ let payURL="upi://pay?pa="+upiID+"&pn=KakaTeaStall&am="+total+"&cu=INR&tn="+encodeURIComponent("Bill-"+billno);
+ let qrLink="https://api.qrserver.com/v1/create-qr-code/?size=220x220&data="+encodeURIComponent(payURL);
+
+ document.getElementById("qrImg").src=qrLink;
+ document.getElementById("payBtn").href=payURL;
+
+ document.getElementById("shop").classList.add("hidden");
+ document.getElementById("cartBar").classList.add("hidden");
+ document.getElementById("billBox").classList.remove("hidden");
+}
+
+/* ===== WHATSAPP SHARE WITH GITHUB PAY PAGE ===== */
+function shareWhatsApp(){
+ let billno=document.getElementById("billNo").innerText;
+ let total=document.getElementById("billTotal").innerText;
+
+ let itemText="";
+ items.forEach(item=>{
+   if(cart[item.id]>0){
+     itemText+=item.name+" × "+cart[item.id]+" = ₹"+(cart[item.id]*item.price)+"\n";
+   }
+ });
+
+ // 👉 GITHUB PAY PAGE LINK
+ let payPage="https://djjeenal.github.io/Maheshpadhiyar/pay.html?bill="+billno+"&amt="+total;
+
+ let uploadLink="https://forms.gle/ntDaekagEsrvXo7H7";
+
+ let message=
+ "🧾 *Kaka Tea Stall*\n\n"+
+ "Bill No: "+billno+"\n\n"+
+ "Items:\n"+itemText+"\n"+
+ "Total Amount: ₹"+total+"\n\n"+
+ "👉 Pay Now Link:\n"+payPage+"\n\n"+
+ "📤 Screenshot Upload Link:\n"+uploadLink+"\n\n"+
+ "⚠️ Payment ke baad screenshot upload karna anivarya hai.\n"+
+ "Upload ke baad counter par Bill Number bataye.";
+
+ window.open("https://wa.me/?text="+encodeURIComponent(message));
+}
+
+function goBack(){
+ document.getElementById("billBox").classList.add("hidden");
+ document.getElementById("shop").classList.remove("hidden");
+ document.getElementById("cartBar").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
