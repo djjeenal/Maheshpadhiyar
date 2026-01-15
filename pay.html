@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kaka Tea Stall — Secure Payment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+ margin:0;
+ font-family:'Poppins',sans-serif;
+ background:#fff6ed;
+ color:#222;
+}
+
+/* ===== HEADER ===== */
+.top-header{
+ background:linear-gradient(135deg,#3e0000,#8b0000,#d97706);
+ color:white;
+ padding:18px;
+ text-align:center;
+ font-size:22px;
+ font-weight:700;
+ letter-spacing:0.5px;
+ box-shadow:0 6px 15px rgba(0,0,0,0.25);
+}
+
+/* ===== PAGE WRAP ===== */
+.page-wrap{
+ padding:22px;
+ text-align:center;
+}
+
+/* ===== CARD ===== */
+.pay-card{
+ background:white;
+ border-radius:22px;
+ padding:24px;
+ box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* ===== LOGO ===== */
+.pay-logo{
+ width:70px;
+ height:70px;
+ border-radius:16px;
+ background:#ffb300;
+ display:inline-flex;
+ align-items:center;
+ justify-content:center;
+ font-size:30px;
+ font-weight:bold;
+ margin-bottom:10px;
+ box-shadow:0 4px 12px rgba(0,0,0,0.35);
+}
+
+/* ===== TEXT ===== */
+.pay-title{
+ font-size:20px;
+ font-weight:700;
+ color:#7b0000;
+}
+
+.pay-sub{
+ font-size:13px;
+ color:#666;
+ margin-top:4px;
+}
+
+.line{
+ border-top:1px dashed #aaa;
+ margin:14px 0;
+}
+
+/* ===== BILL DETAILS ===== */
+.bill-info{
+ font-size:15px;
+ line-height:1.9;
+}
+
+/* ===== BUTTON ===== */
+.primary-btn{
+ background:linear-gradient(135deg,#ffd36a,#ffb300);
+ border:none;
+ padding:13px 24px;
+ border-radius:30px;
+ font-weight:700;
+ font-size:15px;
+ margin-top:12px;
+ box-shadow:0 4px 10px rgba(0,0,0,0.30);
+}
+
+.primary-btn:active{
+ transform:scale(0.97);
+}
+
+/* ===== HOME BUTTON ===== */
+.home-btn{
+ background:#7b0000;
+ color:white;
+ padding:12px 24px;
+ border-radius:30px;
+ text-decoration:none;
+ display:inline-block;
+ margin-top:14px;
+ font-weight:600;
+ box-shadow:0 4px 10px rgba(0,0,0,0.30);
+}
+
+/* ===== NOTE ===== */
+.footer-note{
+ font-size:12px;
+ color:#666;
+ margin-top:14px;
+ line-height:1.6;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="top-header">
+☕ Kaka Tea Stall — Payment Page
+</div>
+
+<!-- CONTENT -->
+<div class="page-wrap">
+ <div class="pay-card">
+
+   <div class="pay-logo">☕</div>
+
+   <div class="pay-title">Secure Digital Payment</div>
+   <div class="pay-sub">Pay easily using any UPI App</div>
+
+   <div class="line"></div>
+
+   <div class="bill-info">
+     <div><b>Bill Number:</b> <span id="billNo">Loading...</span></div>
+     <div><b>Total Amount:</b> ₹ <span id="billAmt">0</span></div>
+   </div>
+
+   <div class="line"></div>
+
+   <!-- DIRECT UPI BUTTON -->
+   <button class="primary-btn" onclick="openUPI()">
+     💳 Open UPI App & Pay Now
+   </button>
+
+   <div class="footer-note">
+     ⚠️ Payment complete hone ke baad<br>
+     Screenshot upload karna zaruri hai.
+   </div>
+
+   <!-- ✅ PREMIUM SCREENSHOT UPLOAD BUTTON -->
+   <a href="https://forms.gle/ntDaekagEsrvXo7H7" target="_blank">
+     <button class="primary-btn">
+       📤 Upload Payment Screenshot
+     </button>
+   </a>
+
+   <!-- HOME BUTTON -->
+   <a href="index.html" class="home-btn">🏠 Back to Home</a>
+
+
+ </div>
+</div>
+
+<script>
+/* ===== READ URL PARAMETERS ===== */
+let params = new URLSearchParams(window.location.search);
+let bill = params.get("bill");
+let amt  = params.get("amt");
+
+/* ===== SHOW DETAILS ===== */
+document.getElementById("billNo").innerText = bill ? bill : "Not Found";
+document.getElementById("billAmt").innerText = amt ? amt : "0";
+
+/* ===== BUILD UPI LINK ===== */
+let upiLink = "";
+
+if(bill && amt){
+ upiLink = "upi://pay?pa=paytmqr6z5isw@ptys"+
+           "&pn=KakaTeaStall"+
+           "&am="+amt+
+           "&cu=INR"+
+           "&tn=Bill-"+bill;
+}
+
+/* ===== OPEN UPI ===== */
+function openUPI(){
+ if(upiLink!=""){
+   location.href = upiLink;
+ }else{
+   alert("Invalid Payment Link");
+ }
+}
+</script>
+
+</body>
+</html>

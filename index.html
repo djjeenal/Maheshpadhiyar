@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kaka Tea Stall — Premium Chai & Bhojan</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+ margin:0;
+ font-family:'Poppins',sans-serif;
+ background:#fff6ed;
+ color:#222;
+}
+
+/* ===== TOP HEADER ===== */
+.top-header{
+ background:linear-gradient(135deg,#3e0000,#8b0000,#d97706);
+ color:white;
+ padding:22px;
+ text-align:center;
+ box-shadow:0 6px 18px rgba(0,0,0,0.35);
+}
+
+.top-header h1{
+ margin:0;
+ font-size:30px;
+ font-weight:700;
+ letter-spacing:1px;
+}
+
+.top-header p{
+ margin:4px 0 0;
+ font-size:14px;
+ opacity:0.9;
+}
+
+/* ===== NAVBAR ===== */
+.navbar{
+ background:#ffffff;
+ display:flex;
+ justify-content:space-around;
+ padding:14px 0;
+ position:sticky;
+ top:0;
+ z-index:100;
+ box-shadow:0 3px 12px rgba(0,0,0,0.12);
+}
+
+.navbar a{
+ color:#7b0000;
+ text-decoration:none;
+ font-weight:600;
+ font-size:15px;
+}
+
+/* ===== HERO ===== */
+.hero{
+ background:linear-gradient(135deg,#ffb74d,#ff7043);
+ color:white;
+ padding:45px 20px;
+ text-align:center;
+ border-radius:0 0 30px 30px;
+ box-shadow:0 6px 18px rgba(0,0,0,0.25);
+}
+
+.hero h2{
+ margin:0;
+ font-size:28px;
+ font-weight:700;
+}
+
+.hero p{
+ margin-top:8px;
+ font-size:15px;
+}
+
+.hero a{
+ display:inline-block;
+ margin-top:15px;
+ background:#7b0000;
+ color:white;
+ padding:14px 28px;
+ border-radius:30px;
+ text-decoration:none;
+ font-weight:700;
+ box-shadow:0 4px 12px rgba(0,0,0,0.35);
+}
+
+/* ===== SECTION COMMON ===== */
+.section{
+ padding:30px 18px;
+ max-width:1100px;
+ margin:auto;
+}
+
+.card{
+ background:white;
+ border-radius:20px;
+ padding:24px;
+ margin-bottom:26px;
+ box-shadow:0 8px 20px rgba(0,0,0,0.10);
+}
+
+/* ===== TITLES ===== */
+h3{
+ margin-top:0;
+ color:#7b0000;
+ font-size:22px;
+ font-weight:700;
+}
+
+/* ===== MENU ===== */
+.menu-line{
+ display:flex;
+ justify-content:space-between;
+ padding:10px 0;
+ border-bottom:1px dashed #ddd;
+ font-weight:500;
+}
+
+/* ===== GALLERY ===== */
+.gallery-grid{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:16px;
+ margin-top:12px;
+}
+
+.gallery-item{
+ background:#fff;
+ border-radius:16px;
+ overflow:hidden;
+ box-shadow:0 6px 14px rgba(0,0,0,0.15);
+}
+
+.gallery-item img{
+ width:100%;
+ height:160px;
+ object-fit:cover;
+ display:block;
+}
+
+.gallery-caption{
+ padding:8px;
+ text-align:center;
+ font-size:13px;
+ font-weight:600;
+ color:#7b0000;
+}
+
+/* ===== MAP ===== */
+.map-frame{
+ width:100%;
+ height:260px;
+ border:0;
+ border-radius:16px;
+ box-shadow:0 6px 14px rgba(0,0,0,0.15);
+}
+
+/* ===== TIMINGS ===== */
+.time-row{
+ display:flex;
+ justify-content:space-between;
+ padding:8px 0;
+ font-weight:500;
+}
+
+/* ===== REVIEW SYSTEM ===== */
+.review-form input, .review-form textarea, .review-form select{
+ width:100%;
+ padding:10px;
+ margin-top:6px;
+ margin-bottom:12px;
+ border-radius:8px;
+ border:1px solid #ccc;
+ font-family:Poppins;
+}
+
+.review-btn{
+ background:#7b0000;
+ color:white;
+ padding:12px 22px;
+ border:none;
+ border-radius:30px;
+ font-weight:700;
+ box-shadow:0 4px 10px rgba(0,0,0,0.3);
+}
+
+.review-card{
+ background:#fffaf4;
+ border-radius:14px;
+ padding:12px;
+ margin-top:10px;
+ box-shadow:0 4px 10px rgba(0,0,0,0.08);
+}
+
+.stars{
+ color:#ffb300;
+ font-size:14px;
+}
+
+/* ===== FOOTER ===== */
+footer{
+ background:linear-gradient(135deg,#3e0000,#7b0000,#d97706);
+ color:white;
+ text-align:center;
+ padding:16px;
+ font-size:14px;
+ margin-top:30px;
+ box-shadow:0 -4px 12px rgba(0,0,0,0.25);
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="top-header">
+<h1>☕ Kaka Tea Stall</h1>
+<p>Premium Chai • Simple Bhojan • Digital Self Order</p>
+</div>
+
+<!-- NAV -->
+<div class="navbar">
+<a href="#about">About</a>
+<a href="#menu">Menu</a>
+<a href="#gallery">Gallery</a>
+<a href="#location">Location</a>
+<a href="#reviews">Reviews</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+<h2>Welcome to Kaka Tea Stall</h2>
+<p>Fast Service • Clean Seating • Digital Payment</p>
+<a href="main.html">🍽️ Order Now</a>
+</div>
+
+<!-- ABOUT -->
+<div class="section" id="about">
+<div class="card">
+<h3>About Kaka Tea Stall</h3>
+<p>
+Kaka Tea Stall ek trusted chai aur bhojan center hai.  
+Yahan garma-garam premium chai, simple ghar-jaisa bhojan  
+aur clean seating environment milta hai.  
+Subah 4:30 AM se raat 11:00 PM tak seva uplabdh hai.
+</p>
+</div>
+</div>
+
+<!-- MENU -->
+<div class="section" id="menu">
+<div class="card">
+<h3>Menu & Prices</h3>
+<div class="menu-line"><span>☕ Regular Chai</span><span>₹5</span></div>
+<div class="menu-line"><span>☕ Special Chai</span><span>₹15</span></div>
+<div class="menu-line"><span>☕ Masala Chai</span><span>₹25</span></div>
+<div class="menu-line"><span>🍛 Dal Chawal</span><span>₹40</span></div>
+<div class="menu-line"><span>🥘 Sabji Roti</span><span>₹50</span></div>
+<div class="menu-line"><span>🍽️ Full Bhojan Plate</span><span>₹60</span></div>
+</div>
+</div>
+
+<!-- GALLERY -->
+<div class="section" id="gallery">
+<div class="card">
+<h3>Gallery</h3>
+<div class="gallery-grid">
+ <div class="gallery-item">
+   <img src="https://i.imgur.com/Fk7V4ks.jpg">
+   <div class="gallery-caption">Premium Fresh Chai</div>
+ </div>
+ <div class="gallery-item">
+   <img src="https://i.imgur.com/0q9Z1Zm.jpg">
+   <div class="gallery-caption">Simple Bhojan</div>
+ </div>
+ <div class="gallery-item">
+   <img src="https://i.imgur.com/7yUvePI.jpg">
+   <div class="gallery-caption">Clean Seating</div>
+ </div>
+ <div class="gallery-item">
+   <img src="https://i.imgur.com/1JQJg9S.jpg">
+   <div class="gallery-caption">Customer Counter</div>
+ </div>
+</div>
+</div>
+</div>
+
+<!-- LOCATION -->
+<div class="section" id="location">
+<div class="card">
+<h3>Our Location</h3>
+<p>Near Patidar Hotel, Juna Octroi Naka, Saijpur Road, Shahwadi, Ahmedabad – 382405</p>
+
+<iframe class="map-frame"
+src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d229.60571159783248!2d72.57424400292705!3d22.961590192570995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395e8f7088b432e3%3A0x8f403fe1a6527e6!2sKaka%20Tea%20Stall!5e0!3m2!1sen!2sin!4v1767346848528">
+</iframe>
+</div>
+</div>
+
+<!-- TIMINGS -->
+<div class="section">
+<div class="card">
+<h3>Timings</h3>
+<div class="time-row"><span>🌅 Morning</span><span>4:30 AM – 11:00 AM</span></div>
+<div class="time-row"><span>🌙 Evening</span><span>5:00 PM – 11:00 PM</span></div>
+</div>
+</div>
+
+<!-- ⭐ CUSTOMER REVIEWS -->
+<div class="section" id="reviews">
+<div class="card">
+<h3>Customer Reviews</h3>
+
+<div class="review-form">
+<input id="custName" placeholder="Your Name">
+<select id="custRating">
+<option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+<option value="4">⭐⭐⭐⭐ Good</option>
+<option value="3">⭐⭐⭐ Average</option>
+<option value="2">⭐⭐ Poor</option>
+<option value="1">⭐ Very Bad</option>
+</select>
+<textarea id="custReview" placeholder="Write your review..."></textarea>
+<button class="review-btn" onclick="addReview()">Submit Review</button>
+</div>
+
+<div id="reviewList"></div>
+
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+☕ © 2026 Kaka Tea Stall — Premium Digital Self Order System
+</footer>
+
+<script>
+/* ===== REVIEW SYSTEM ===== */
+let reviews = JSON.parse(localStorage.getItem("kakaReviews")) || [];
+
+function loadReviews(){
+ let html="";
+ reviews.forEach(r=>{
+  html+=`
+   <div class="review-card">
+     <b>${r.name}</b><br>
+     <span class="stars">${"★".repeat(r.rating)}</span>
+     <p>${r.text}</p>
+   </div>
+  `;
+ });
+ document.getElementById("reviewList").innerHTML = html;
+}
+loadReviews();
+
+function addReview(){
+ let name=document.getElementById("custName").value;
+ let rating=document.getElementById("custRating").value;
+ let text=document.getElementById("custReview").value;
+
+ if(name=="" || text==""){ alert("Please fill all fields"); return; }
+
+ reviews.push({name:name,rating:rating,text:text});
+ localStorage.setItem("kakaReviews",JSON.stringify(reviews));
+
+ document.getElementById("custName").value="";
+ document.getElementById("custReview").value="";
+
+ loadReviews();
+ alert("Thank you for your review!");
+}
+</script>
+
+</body>
+</html>

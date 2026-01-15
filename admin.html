@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Kaka Tea Stall — Premium Admin Panel</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+ margin:0;
+ font-family:'Poppins',sans-serif;
+ background:linear-gradient(135deg,#fff1e6,#ffe4c7);
+ color:#222;
+}
+
+/* ===== HEADER ===== */
+.top-header{
+ background:linear-gradient(135deg,#3e0000,#8b0000,#d97706);
+ color:white;
+ padding:20px;
+ text-align:center;
+ font-size:24px;
+ font-weight:700;
+ letter-spacing:1px;
+ box-shadow:0 8px 20px rgba(0,0,0,0.35);
+ position:sticky;
+ top:0;
+ z-index:50;
+}
+
+/* ===== COMMON ===== */
+.hidden{display:none;}
+.section{padding:22px;}
+.card{
+ background:rgba(255,255,255,0.95);
+ border-radius:22px;
+ padding:22px;
+ margin-bottom:22px;
+ box-shadow:0 10px 25px rgba(0,0,0,0.12);
+ backdrop-filter: blur(6px);
+ border:1px solid rgba(255,255,255,0.4);
+}
+h3{
+ margin-top:0;
+ color:#7b0000;
+ font-size:20px;
+ font-weight:700;
+}
+
+/* ===== INPUTS ===== */
+input, select{
+ width:100%;
+ padding:12px;
+ margin-top:6px;
+ margin-bottom:14px;
+ border-radius:10px;
+ border:1px solid #ccc;
+ font-family:Poppins;
+ font-size:14px;
+ background:#fffdfb;
+}
+
+/* ===== BUTTONS ===== */
+button{
+ background:linear-gradient(135deg,#ffd36a,#ffb300);
+ border:none;
+ padding:10px 18px;
+ border-radius:30px;
+ font-weight:700;
+ font-size:14px;
+ box-shadow:0 4px 10px rgba(0,0,0,0.25);
+ cursor:pointer;
+ transition:0.2s;
+}
+button:hover{
+ transform:translateY(-1px);
+ box-shadow:0 6px 14px rgba(0,0,0,0.35);
+}
+.small-btn{
+ padding:6px 12px;
+ font-size:12px;
+}
+
+/* ===== ITEM ROW ===== */
+.item-row{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:10px 0;
+ border-bottom:1px dashed #ddd;
+}
+.item-row img{
+ width:50px;
+ height:50px;
+ border-radius:10px;
+ object-fit:cover;
+ box-shadow:0 3px 8px rgba(0,0,0,0.2);
+}
+.edit-mode{
+ background:linear-gradient(135deg,#fff7d6,#ffeaa7);
+ border-radius:12px;
+ padding:8px;
+}
+
+/* ===== LOGIN CARD CENTER ===== */
+.center-card{
+ max-width:380px;
+ margin:auto;
+ text-align:center;
+}
+
+/* ===== TOGGLE ROW ===== */
+.toggle-row{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ padding:8px 0;
+ font-weight:500;
+}
+
+/* ===== FOOT SPACE ===== */
+.footer-space{
+ height:40px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="top-header">
+☕ Kaka Tea Stall — Premium Admin Control
+</div>
+
+<!-- LOGIN -->
+<div class="section" id="loginBox">
+ <div class="card center-card">
+   <h3>Admin Secure Login</h3>
+   <input type="password" id="pass" placeholder="Enter Admin Password">
+   <button onclick="login()">Login</button>
+   <p id="loginMsg" style="color:red;"></p>
+ </div>
+</div>
+
+<!-- PANEL -->
+<div class="section hidden" id="panel">
+
+<!-- PASSWORD -->
+<div class="card">
+<h3>Change Admin Password</h3>
+<input type="password" id="newPass" placeholder="New Password">
+<button onclick="changePass()">Update Password</button>
+</div>
+
+<!-- PAYMENT SETTINGS -->
+<div class="card">
+<h3>Payment System Controls</h3>
+
+<div class="toggle-row">QR / UPI Payment <input type="checkbox" id="upiToggle"></div>
+<div class="toggle-row">WhatsApp Share <input type="checkbox" id="waToggle"></div>
+<div class="toggle-row">Direct UPI Link in WhatsApp <input type="checkbox" id="directUpiToggle"></div>
+<div class="toggle-row">Pay Page Link in WhatsApp <input type="checkbox" id="payPageToggle"></div>
+
+<button onclick="saveSystem()">Save Settings</button>
+</div>
+
+<!-- CATEGORY MANAGER -->
+<div class="card">
+<h3>Category Manager</h3>
+<input id="catName" placeholder="New Category Name">
+<button onclick="addCategory()">Add Category</button>
+<div id="catList"></div>
+</div>
+
+<!-- ADD / EDIT ITEM -->
+<div class="card">
+<h3 id="itemFormTitle">Add New Item</h3>
+<input id="itemName" placeholder="Item Name">
+<input id="itemPrice" placeholder="Item Price">
+<select id="itemCategory"></select>
+<input type="file" id="itemImg">
+<input type="hidden" id="editIndex">
+<button onclick="saveItem()">Save Item</button>
+<button onclick="resetForm()">Clear</button>
+</div>
+
+<!-- ITEM LIST -->
+<div class="card">
+<h3>All Items</h3>
+<div id="itemListAdmin"></div>
+</div>
+
+<div class="footer-space"></div>
+</div>
+
+<script>
+/* ===== LOGIN ===== */
+let savedPass = localStorage.getItem("adminPass") || "1234";
+
+function login(){
+ if(pass.value === savedPass){
+   loginBox.classList.add("hidden");
+   panel.classList.remove("hidden");
+   loadSystem();
+   loadCategories();
+   loadItems();
+ }else{
+   loginMsg.innerText="Wrong Password!";
+ }
+}
+
+function changePass(){
+ if(newPass.value.length < 4){ alert("Minimum 4 characters"); return; }
+ localStorage.setItem("adminPass", newPass.value);
+ alert("Password Updated Successfully!");
+ newPass.value="";
+}
+
+/* ===== PAYMENT SETTINGS ===== */
+function saveSystem(){
+ localStorage.setItem("upiSystem", upiToggle.checked);
+ localStorage.setItem("waSystem", waToggle.checked);
+ localStorage.setItem("directUpi", directUpiToggle.checked);
+ localStorage.setItem("payPage", payPageToggle.checked);
+ alert("System Settings Saved!");
+}
+
+function loadSystem(){
+ upiToggle.checked = localStorage.getItem("upiSystem") !== "false";
+ waToggle.checked = localStorage.getItem("waSystem") !== "false";
+ directUpiToggle.checked = localStorage.getItem("directUpi") !== "false";
+ payPageToggle.checked = localStorage.getItem("payPage") !== "false";
+}
+
+/* ===== CATEGORY ===== */
+let categories = JSON.parse(localStorage.getItem("catDB")) || ["Chai","Bhojan"];
+
+function loadCategories(){
+ catList.innerHTML="";
+ categories.forEach((c,i)=>{
+   catList.innerHTML += `<div>${c} <button class="small-btn" onclick="deleteCategory(${i})">Delete</button></div>`;
+ });
+ itemCategory.innerHTML = categories.map(c=>`<option>${c}</option>`).join("");
+}
+
+function addCategory(){
+ if(!catName.value.trim()) return;
+ categories.push(catName.value.trim());
+ localStorage.setItem("catDB", JSON.stringify(categories));
+ catName.value="";
+ loadCategories();
+}
+
+function deleteCategory(i){
+ categories.splice(i,1);
+ localStorage.setItem("catDB", JSON.stringify(categories));
+ loadCategories();
+}
+
+/* ===== ITEMS ===== */
+let items = JSON.parse(localStorage.getItem("itemsDB")) || [];
+
+function loadItems(){
+ let html="";
+ items.forEach((it,i)=>{
+ html+=`
+ <div class="item-row ${editIndex.value==i ? 'edit-mode':''}">
+   <img src="${it.img}">
+   <span>${it.name} - ₹${it.price} (${it.cat})</span>
+   <div>
+     <button class="small-btn" onclick="editItem(${i})">Edit</button>
+     <button class="small-btn" onclick="deleteItem(${i})">Delete</button>
+   </div>
+ </div>`;
+ });
+ itemListAdmin.innerHTML = html;
+}
+
+function editItem(i){
+ let it = items[i];
+ itemName.value = it.name;
+ itemPrice.value = it.price;
+ itemCategory.value = it.cat;
+ editIndex.value = i;
+ itemFormTitle.innerText = "Edit Item Mode";
+ loadItems();
+ window.scrollTo(0,0);
+}
+
+function saveItem(){
+ let name = itemName.value.trim();
+ let price = itemPrice.value.trim();
+ let cat = itemCategory.value;
+ let file = itemImg.files[0];
+ let idx = editIndex.value;
+
+ if(!name || !price){ alert("Fill all fields"); return; }
+
+ if(idx === ""){
+   if(!file){ alert("Select Image"); return; }
+   let r=new FileReader();
+   r.onload=function(e){
+     items.push({name,price,cat,img:e.target.result});
+     localStorage.setItem("itemsDB",JSON.stringify(items));
+     resetForm(); loadItems();
+   }
+   r.readAsDataURL(file);
+ } else {
+   let i = Number(idx);
+   items[i].name=name;
+   items[i].price=price;
+   items[i].cat=cat;
+   if(file){
+     let r=new FileReader();
+     r.onload=function(e){
+       items[i].img=e.target.result;
+       localStorage.setItem("itemsDB",JSON.stringify(items));
+       resetForm(); loadItems();
+     }
+     r.readAsDataURL(file);
+   } else {
+     localStorage.setItem("itemsDB",JSON.stringify(items));
+     resetForm(); loadItems();
+   }
+ }
+}
+
+function deleteItem(i){
+ items.splice(i,1);
+ localStorage.setItem("itemsDB",JSON.stringify(items));
+ loadItems();
+}
+
+function resetForm(){
+ itemName.value="";
+ itemPrice.value="";
+ itemImg.value="";
+ editIndex.value="";
+ itemFormTitle.innerText="Add New Item";
+}
+</script>
+
+</body>
+</html>
